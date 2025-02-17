@@ -80,8 +80,8 @@ template <typename T, typename Allocator = std::allocator<T>, typename... Args>
 shared_ptr<T, Allocator> make_shared(Args &&...args) {
   typename Allocator::template rebind<_inner<T, Allocator>>::other alloc;
   _inner<T, Allocator> *inner = alloc.allocate(1);
-  inner->strong_count.store(1, std::memory_order_acquire);
-  inner->weak_count.store(0, std::memory_order_acquire);
+  inner->strong_count.store(1, std::memory_order_release);
+  inner->weak_count.store(0, std::memory_order_release);
 
 #if __cplusplus < 202002L
   alloc.construct(&inner->data, args...);

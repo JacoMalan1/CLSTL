@@ -1,0 +1,35 @@
+name: Build and test
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: sudo apt-get install lcov
+
+      - run: mkdir build
+      - name: Generate build scripts
+        working-directory: build
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build
+        working-directory: build
+        run: make && ./clstl_test
+
+      - name: Generate coverage report
+        working-directory: build
+        run: make coverage
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
