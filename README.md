@@ -1,4 +1,4 @@
-[![codecov](https://codecov.io/gh/JacoMalan1/CLSTL/graph/badge.svg?token=YL43DILCY9)](https://codecov.io/gh/JacoMalan1/CLSTL)
+[![codecov](https://codecov.io/gh/JacoMalan1/CLSTL/branch/main/graph/badge.svg?token=YL43DILCY9)](https://codecov.io/gh/JacoMalan1/CLSTL)
 
 # CLSTL
 
