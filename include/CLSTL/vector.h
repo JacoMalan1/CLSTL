@@ -8,7 +8,7 @@
 namespace clstl {
 template <typename T, typename Allocator = std::allocator<T>> class vector;
 
-template <typename T> class vector_iter {
+template <typename T> class array_iter {
 public:
   using iterator_category = std::random_access_iterator_tag;
   using value_type = T;
@@ -19,46 +19,46 @@ public:
   using const_reference = const T &;
 
   friend class vector<T>;
-  vector_iter(const vector_iter<T> &other) = default;
-  ~vector_iter() {}
+  array_iter(const array_iter<T> &other) = default;
+  ~array_iter() {}
 
-  vector_iter<T> &operator=(const vector_iter<T> &other) = default;
+  array_iter<T> &operator=(const array_iter<T> &other) = default;
 
-  bool operator==(const vector_iter<T> &other) const {
+  bool operator==(const array_iter<T> &other) const {
     return this->m_Ptr == other.m_Ptr;
   }
 
-  bool operator!=(const vector_iter<T> &other) const {
+  bool operator!=(const array_iter<T> &other) const {
     return this->m_Ptr != other.m_Ptr;
   }
 
-  vector_iter<T> &operator++() {
+  array_iter<T> &operator++() {
     ++this->m_Ptr;
     return *this;
   }
 
-  vector_iter<T> &operator+=(const difference_type &movement) {
+  array_iter<T> &operator+=(const difference_type &movement) {
     this->m_Ptr += movement;
     return *this;
   }
 
-  vector_iter<T> &operator-=(const difference_type &movement) {
+  array_iter<T> &operator-=(const difference_type &movement) {
     this->m_Ptr -= movement;
     return *this;
   }
 
-  vector_iter<T> &operator--() {
+  array_iter<T> &operator--() {
     --this->m_Ptr;
     return *this;
   }
 
-  vector_iter<T> operator++(int) {
+  array_iter<T> operator++(int) {
     auto temp = *this;
     this->m_Ptr++;
     return temp;
   }
 
-  vector_iter<T> operator--(int) {
+  array_iter<T> operator--(int) {
     auto temp = *this;
     this->m_Ptr--;
     return temp;
@@ -71,7 +71,7 @@ public:
   const_pointer operator->() const { return this->m_Ptr; }
 
 private:
-  vector_iter(pointer data) : m_Ptr(data) {}
+  array_iter(pointer data) : m_Ptr(data) {}
 
   T *m_Ptr;
 };
@@ -84,8 +84,8 @@ public:
   using pointer = T *;
   using const_pointer = const T *;
 
-  typedef vector_iter<T> iterator;
-  typedef vector_iter<const T> const_iterator;
+  typedef array_iter<T> iterator;
+  typedef array_iter<const T> const_iterator;
 
   vector() : m_Data(nullptr), m_Capacity(0), m_Length(0), m_Alloc() {}
   vector(const vector &other)

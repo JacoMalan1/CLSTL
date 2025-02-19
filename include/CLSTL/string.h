@@ -17,11 +17,11 @@ public:
   using reference = _Char_T &;
   using const_reference = const _Char_T &;
 
-  basic_string() : m_Length(0), m_Capacity(0), m_Data(nullptr), m_Alloc() {}
+  basic_string() : m_Alloc(), m_Data(nullptr), m_Length(0), m_Capacity(0) {}
 
   basic_string(const basic_string &other)
-      : m_Length(other.m_Length), m_Capacity(other.m_Capacity),
-        m_Alloc(other.m_Alloc) {
+      : m_Alloc(other.m_Alloc), m_Length(other.m_Length),
+        m_Capacity(other.m_Capacity) {
     if (this->m_Capacity > 0) {
       this->m_Data = this->m_Alloc.allocate(this->m_Capacity);
       std::memcpy(this->m_Data, other.m_Data,
@@ -30,6 +30,10 @@ public:
   }
 
   basic_string &operator=(const basic_string &other) {
+    if (this->m_Data) {
+      this->m_Alloc.deallocate(this->m_Data, this->m_Capacity);
+    }
+
     this->m_Length = other.m_Length;
     this->m_Capacity = other.m_Capacity;
     this->m_Alloc = other.m_Alloc;
@@ -38,15 +42,21 @@ public:
       std::memcpy(this->m_Data, other.m_Data,
                   this->m_Capacity * sizeof(_Char_T));
     }
+    return *this;
   }
 
   basic_string &operator=(const char *other) {
+    if (this->m_Data) {
+      this->m_Alloc.deallocate(this->m_Data, this->m_Capacity);
+    }
+
     std::size_t len = std::strlen(other);
     this->m_Length = len;
     this->m_Capacity = len + 1;
     this->m_Data = this->m_Alloc.allocate(this->m_Capacity);
     std::memcpy(this->m_Data, other, sizeof(_Char_T) * (len + 1));
     this->m_Data[this->m_Length] = 0;
+    return *this;
   }
 
   basic_string(const char *s) : m_Alloc() {
@@ -102,21 +112,16 @@ public:
   basic_string<_Char_T, Allocator> operator+(const basic_string &other) {
     basic_string<_Char_T, Allocator> result{};
     result.m_Alloc = this->m_Alloc;
-    result.m_Capacity = this->m_Capacity + other.m_Capacity;
-    if (result.m_Capacity > 0) {
-      result.m_Capacity--;
-    }
+    result.m_Capacity = this->m_Length + other.m_Length + 1;
     result.m_Length = this->m_Length + other.m_Length;
     result.m_Data = this->m_Alloc.allocate(result.m_Capacity);
 
-    if (this->m_Length > 0) {
-      std::memcpy(&result.m_Data, this->m_Data,
-                  this->m_Length * sizeof(_Char_T));
+    for (std::size_t i = 0; i < this->m_Length; i++) {
+      result.m_Data[i] = this->m_Data[i];
     }
 
-    if (other.m_Length > 0) {
-      std::memcpy(&result.m_Data, other.m_Data,
-                  other.m_Length * sizeof(_Char_T));
+    for (std::size_t i = 0; i < other.m_Length; i++) {
+      result.m_Data[this->m_Length + i] = other.m_Data[i];
     }
 
     if (result.m_Length > 0) {
@@ -131,7 +136,7 @@ public:
       return false;
     }
 
-    if (this->is_empty()) {
+    if (this->empty()) {
       return true;
     }
 

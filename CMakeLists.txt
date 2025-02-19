@@ -27,7 +27,11 @@ set(gtest_force_shared_crt
 
 FetchContent_MakeAvailable(googletest)
 
+file(GLOB LIB_HEADERS ${PROJECT_SOURCE_DIR}/include/CLSTL/*.h)
+file(GLOB SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 file(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/tests/*.cpp)
+
+add_library(clstl ${SRC_FILES} ${LIB_HEADERS})
 add_executable(clstl_test ${TEST_SRC})
 add_definitions(-Werror -Wpedantic -Wall -Wextra)
 
@@ -49,6 +53,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 target_link_libraries(clstl_test GTest::gtest_main)
+target_link_libraries(clstl_test clstl)
 
 include(GoogleTest)
 gtest_discover_tests(clstl_test)
