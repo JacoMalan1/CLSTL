@@ -1,6 +1,7 @@
 #ifndef CLSTL_OPTIONAL_H
 #define CLSTL_OPTIONAL_H
 
+#include <cstddef>
 #include <cstdint>
 #include <exception>
 #include <type_traits>
@@ -21,13 +22,23 @@ template <typename T> union opt_storage {
   uint8_t _dummy;
   T _value;
 
-  opt_storage() noexcept : _dummy() {}
+  opt_storage() : _dummy() {}
   opt_storage(const T &value) : _value(std::move(value)) {}
   opt_storage(T &&value) : _value(std::move(value)) {}
 
+  opt_storage &operator=(const T &value) {
+    this->_value = value;
+    return *this;
+  }
+
+  opt_storage &operator=(std::nullptr_t) {
+    this->_dummy = 0;
+    return *this;
+  }
+
   template <typename... Args>
   opt_storage(Args &&...args) : _value(std::forward<Args>(args)...) {}
-  ~opt_storage() = default;
+  ~opt_storage() {};
 };
 } // namespace __internal
 
@@ -35,17 +46,38 @@ template <typename T> class optional {
 public:
   using value_type = T;
   using reference = typename std::add_lvalue_reference<value_type>::type;
-  using const_reference = typename std::add_const<reference>::type;
+  using const_reference = typename std::add_lvalue_reference<
+      typename std::add_const<value_type>::type>::type;
   using pointer = typename std::add_pointer<value_type>::type;
   using const_pointer = typename std::add_const<pointer>::type;
 
-  optional() : m_HasValue(false) {}
+  optional() : m_HasValue(false), m_Value() {}
   optional(T &&value) : m_HasValue(true), m_Value(value) {}
   optional(const T &value) : m_Value(value), m_HasValue(true) {}
+  optional(const optional &other)
+      : m_Value(other.m_HasValue ? other.value() : std::nullptr_t()),
+        m_HasValue(other.m_HasValue) {}
+
   template <typename... Args>
   optional(Args &&...args)
       : m_HasValue(true), m_Value(std::forward<Args>(args)...) {}
   ~optional() = default;
+
+  optional &operator=(const T &val) {
+    this->m_HasValue = true;
+    this->m_Value = val;
+    return *this;
+  }
+
+  optional &operator=(const optional &other) {
+    this->m_HasValue = other.m_HasValue;
+    if (this->m_HasValue) {
+      this->m_Value = other.value();
+    } else {
+      this->m_Value = std::nullptr_t();
+    }
+    return *this;
+  }
 
   bool has_value() const { return this->m_HasValue; }
   reference value() {
@@ -86,7 +118,7 @@ public:
 
   void reset() {
     this->m_HasValue = false;
-    this->m_Value = {};
+    this->m_Value = std::nullptr_t();
   }
 
   template <typename... Args> void emplace(Args &&...args) {
