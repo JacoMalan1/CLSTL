@@ -19,7 +19,7 @@ jobs:
       - run: mkdir build
       - name: Generate build scripts
         working-directory: build
-        run: cmake .. -DCMAKE_BUILD_TYPE=Debug
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DCLSTL_TEST=1
 
       - name: Build
         working-directory: build

@@ -16,30 +16,35 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(clstl_test ${PROJECT_SOURCE_DIR}/include)
 
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-)
+if(CLSTL_TEST)
+  include(FetchContent)
+  FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+  )
 
-set(gtest_force_shared_crt
-    ON
-    CACHE BOOL "" FORCE)
+  set(gtest_force_shared_crt
+      ON
+      CACHE BOOL "" FORCE)
 
-FetchContent_MakeAvailable(googletest)
+  FetchContent_MakeAvailable(googletest)
+endif()
 
 file(GLOB LIB_HEADERS ${PROJECT_SOURCE_DIR}/include/CLSTL/*.h)
 file(GLOB SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 file(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/tests/*.cpp)
 
 add_library(clstl ${SRC_FILES} ${LIB_HEADERS})
-add_executable(clstl_test ${TEST_SRC})
+
+if(CLSTL_TEST)
+  add_executable(clstl_test ${TEST_SRC})
+endif()
 
 if(NOT MSVC)
   add_definitions(-Werror -Wpedantic -Wall -Wextra)
 endif()
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND CLSTL_TEST)
   add_compile_definitions(CLSTL_DEBUG)
   set(CMAKE_CXX_FLAGS
       "-coverage -fno-inline -fno-inline-small-functions -fno-default-inline")
@@ -57,8 +62,10 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 endif()
 
-target_link_libraries(clstl_test GTest::gtest_main)
-target_link_libraries(clstl_test clstl)
+if(CLSTL_TEST)
+  target_link_libraries(clstl_test GTest::gtest_main)
+  target_link_libraries(clstl_test clstl)
 
-include(GoogleTest)
-gtest_discover_tests(clstl_test)
+  include(GoogleTest)
+  gtest_discover_tests(clstl_test)
+endif()
