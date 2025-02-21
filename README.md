@@ -1,7 +1,7 @@
 [![Build and test](https://github.com/JacoMalan1/CLSTL/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/JacoMalan1/CLSTL/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/JacoMalan1/CLSTL/branch/main/graph/badge.svg?token=YL43DILCY9)](https://codecov.io/gh/JacoMalan1/CLSTL)
-[![Clang](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_clang.yml/badge.svg)](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_clang.yml)
-[![GCC](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_gcc.yml/badge.svg)](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_gcc.yml)
+[![Clang](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_clang.yml/badge.svg?branch=main)](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_clang.yml)
+[![GCC](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_gcc.yml/badge.svg?branch=main)](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_gcc.yml)
 
 # CLSTL
 
