@@ -1,3 +1,4 @@
+[![Build and test](https://github.com/JacoMalan1/CLSTL/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/JacoMalan1/CLSTL/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/JacoMalan1/CLSTL/branch/main/graph/badge.svg?token=YL43DILCY9)](https://codecov.io/gh/JacoMalan1/CLSTL)
 
 # CLSTL
