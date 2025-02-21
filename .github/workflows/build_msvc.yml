@@ -26,4 +26,4 @@ jobs:
         run: |
           cd build
           nmake
-          ./Release/clstl_test.exe
+          ./clstl_test.exe

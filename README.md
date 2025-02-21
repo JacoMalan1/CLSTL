@@ -2,6 +2,7 @@
 [![codecov](https://codecov.io/gh/JacoMalan1/CLSTL/branch/main/graph/badge.svg?token=YL43DILCY9)](https://codecov.io/gh/JacoMalan1/CLSTL)
 [![Clang](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_clang.yml/badge.svg?branch=main)](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_clang.yml)
 [![GCC](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_gcc.yml/badge.svg?branch=main)](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_gcc.yml)
+[![MSVC](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_msvc.yml/badge.svg?branch=main)](https://github.com/JacoMalan1/CLSTL/actions/workflows/build_msvc.yml)
 
 # CLSTL
 
