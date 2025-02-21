@@ -34,7 +34,10 @@ file(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/tests/*.cpp)
 
 add_library(clstl ${SRC_FILES} ${LIB_HEADERS})
 add_executable(clstl_test ${TEST_SRC})
-add_definitions(-Werror -Wpedantic -Wall -Wextra)
+
+if(NOT MSVC)
+  add_definitions(-Werror -Wpedantic -Wall -Wextra)
+endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(CLSTL_DEBUG)
