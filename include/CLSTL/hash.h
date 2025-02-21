@@ -1,6 +1,7 @@
 #ifndef CLSTL_HASH_H
 #define CLSTL_HASH_H
 
+#include <cstddef>
 #include <cstdint>
 
 namespace clstl {
