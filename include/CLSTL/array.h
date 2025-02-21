@@ -2,6 +2,7 @@
 #define CLSTL_ARRAY_H
 
 #include <cstddef>
+#include <forward_list>
 #include <initializer_list>
 #include <stdexcept>
 
@@ -16,8 +17,9 @@ public:
   using reference = T &;
   using const_reference = const T &;
 
+  array_iter(pointer data) : m_Ptr(data) {}
+
   array_iter(const array_iter<T> &other) = default;
-  ~array_iter() {}
 
   array_iter<T> &operator=(const array_iter<T> &other) = default;
 
@@ -39,25 +41,9 @@ public:
     return *this;
   }
 
-  array_iter<T> &operator-=(const difference_type &movement) {
-    this->m_Ptr -= movement;
-    return *this;
-  }
-
-  array_iter<T> &operator--() {
-    --this->m_Ptr;
-    return *this;
-  }
-
   array_iter<T> operator++(int) {
     auto temp = *this;
     this->m_Ptr++;
-    return temp;
-  }
-
-  array_iter<T> operator--(int) {
-    auto temp = *this;
-    this->m_Ptr--;
     return temp;
   }
 
@@ -68,8 +54,6 @@ public:
   const_pointer operator->() const { return this->m_Ptr; }
 
 private:
-  array_iter(pointer data) : m_Ptr(data) {}
-
   T *m_Ptr;
 };
 
@@ -82,11 +66,8 @@ public:
   using iterator = array_iter<T>;
 
   array() = default;
-  array(std::initializer_list<T> l) {
-    for (std::size_t i = 0; i < l.size(); i++) {
-      this->m_Data[i] = *(l.begin() + i);
-    }
-  }
+  template <typename... Args>
+  array(Args &&...args) : m_Data{std::forward<Args>(args)...} {}
 
   iterator begin() { return array_iter(this->m_Data); }
   iterator end() { return array_iter(this->m_Data + N); }

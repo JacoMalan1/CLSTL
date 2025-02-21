@@ -1,25 +1,19 @@
 #ifndef CLSTL_UNORDERED_MAP_H
 #define CLSTL_UNORDERED_MAP_H
 
+#ifndef CLSTL_ENABLE_UNSTABLE
+#error "Unordered map is unstable"
+#endif
+
 #define __CLSTL_HASHMAP_BUCKET_SIZE 5
 
 #include <CLSTL/hash.h>
 #include <CLSTL/optional.h>
+#include <CLSTL/pair.h>
 #include <memory>
 #include <stdexcept>
 
 namespace clstl {
-template <typename F, typename S> struct pair {
-  F first;
-  S second;
-
-  pair(F first, S second) : first(first), second(second) {}
-};
-
-template <typename F, typename S> pair<F, S> make_pair(F first, S second) {
-  return pair(first, second);
-}
-
 template <typename K, typename V,
           typename Allocator = std::allocator<optional<pair<K, V>>>>
 class unordered_map {
@@ -29,10 +23,10 @@ public:
   using reference = typename std::add_lvalue_reference<value_type>::type;
   using const_reference = typename std::add_const<reference>::type;
 
-  unordered_map() : m_Storage(nullptr), m_Alloc(), m_Size(0), m_Buckets(0) {}
+  unordered_map() : m_Storage(nullptr), m_Size(0), m_Buckets(0), m_Alloc() {}
   unordered_map(const unordered_map &other)
-      : m_Alloc(other.m_Alloc), m_Size(other.m_Size),
-        m_Buckets(other.m_Buckets) { /** TODO: Implement copy-ctor */ }
+      : m_Size(other.m_Size), m_Buckets(other.m_Buckets),
+        m_Alloc(other.m_Alloc) { /** TODO: Implement copy-ctor */ }
   unordered_map &operator=(const unordered_map &other) {
     this->m_Alloc = other.m_Alloc;
     this->m_Size = other.m_Size;
@@ -105,8 +99,17 @@ public:
 
 private:
   void grow(std::size_t new_buckets) {
+    if (new_buckets <= this->m_Buckets) {
+      return;
+    }
+
     optional<pair<K, V>> *new_storage =
         this->m_Alloc.allocate(new_buckets * __CLSTL_HASHMAP_BUCKET_SIZE);
+    for (std::size_t i = 0; i < new_buckets * __CLSTL_HASHMAP_BUCKET_SIZE;
+         i++) {
+      new_storage[i] = clstl::optional<pair<K, V>>();
+    }
+
     optional<pair<K, V>> *old_storage = this->m_Storage;
     std::size_t old_buckets = this->m_Buckets;
 
@@ -123,6 +126,11 @@ private:
           }
         }
       }
+    }
+
+    for (std::size_t i = 0; i < old_buckets * __CLSTL_HASHMAP_BUCKET_SIZE;
+         i++) {
+      std::destroy_at(old_storage + i);
     }
 
     this->m_Alloc.deallocate(old_storage,

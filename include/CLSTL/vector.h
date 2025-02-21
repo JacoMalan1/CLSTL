@@ -20,7 +20,6 @@ public:
 
   const_vector_iter(pointer data) : m_Ptr(data) {}
   const_vector_iter(const const_vector_iter &other) = default;
-  ~const_vector_iter() {}
 
   const_vector_iter<_Vec> &operator=(const const_vector_iter &other) = default;
 
@@ -42,30 +41,13 @@ public:
     return *this;
   }
 
-  const_vector_iter &operator-=(const difference_type &movement) {
-    this->m_Ptr -= movement;
-    return *this;
-  }
-
-  const_vector_iter &operator--() {
-    --this->m_Ptr;
-    return *this;
-  }
-
   const_vector_iter operator++(int) {
     auto temp = *this;
     this->m_Ptr++;
     return temp;
   }
 
-  const_vector_iter operator--(int) {
-    auto temp = *this;
-    this->m_Ptr--;
-    return temp;
-  }
-
   reference operator*() { return *this->m_Ptr; }
-
   pointer operator->() { return this->m_Ptr; }
 
 private:
@@ -84,7 +66,6 @@ public:
 
   vector_iter(pointer data) : m_Ptr(data) {}
   vector_iter(const vector_iter &other) = default;
-  ~vector_iter() {}
 
   vector_iter<_Vec> &operator=(const vector_iter &other) = default;
 
@@ -106,25 +87,9 @@ public:
     return *this;
   }
 
-  vector_iter &operator-=(const difference_type &movement) {
-    this->m_Ptr -= movement;
-    return *this;
-  }
-
-  vector_iter &operator--() {
-    --this->m_Ptr;
-    return *this;
-  }
-
   vector_iter operator++(int) {
     auto temp = *this;
     this->m_Ptr++;
-    return temp;
-  }
-
-  vector_iter operator--(int) {
-    auto temp = *this;
-    this->m_Ptr--;
     return temp;
   }
 
@@ -150,7 +115,6 @@ public:
 
   vector_reverse_iter(pointer data) : m_Ptr(data) {}
   vector_reverse_iter(const vector_reverse_iter &other) = default;
-  ~vector_reverse_iter() {}
 
   vector_reverse_iter<_Vec> &
   operator=(const vector_reverse_iter &other) = default;
@@ -173,25 +137,9 @@ public:
     return *this;
   }
 
-  vector_reverse_iter &operator-=(const difference_type &movement) {
-    this->m_Ptr += movement;
-    return *this;
-  }
-
-  vector_reverse_iter &operator--() {
-    ++this->m_Ptr;
-    return *this;
-  }
-
   vector_reverse_iter operator++(int) {
     auto temp = *this;
     this->m_Ptr--;
-    return temp;
-  }
-
-  vector_reverse_iter operator--(int) {
-    auto temp = *this;
-    this->m_Ptr++;
     return temp;
   }
 
@@ -221,7 +169,7 @@ public:
 
   vector() : m_Data(nullptr), m_Capacity(0), m_Length(0), m_Alloc() {}
   vector(const vector &other)
-      : m_Capacity(other.m_Length), m_Length(other.m_Length), m_Data(nullptr),
+      : m_Data(nullptr), m_Capacity(other.m_Length), m_Length(other.m_Length),
         m_Alloc() {
     this->m_Data = this->m_Alloc.allocate(this->m_Length);
     for (std::size_t i = 0; i < other.m_Length; i++) {
@@ -239,8 +187,8 @@ public:
   }
 
   vector(vector &&other)
-      : m_Capacity(other.m_Capacity), m_Length(other.m_Length),
-        m_Data(other.m_Data) {}
+      : m_Data(other.m_Data), m_Capacity(other.m_Capacity),
+        m_Length(other.m_Length) {}
 
   vector &operator=(const vector &other);
   ~vector() {
@@ -295,7 +243,8 @@ public:
   const_pointer data() const { return this->m_Data; }
 
   void clear() {
-    for (std::size_t i = 0; i < this->m_Length; i++) {
+    std::size_t clear_count = this->m_Length;
+    for (std::size_t i = 0; i < clear_count; i++) {
       this->pop_back();
     }
   }

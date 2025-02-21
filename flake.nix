@@ -9,6 +9,6 @@
       pkgs = import nixpkgs { inherit system; };
     in {
       devShells.${system}.default =
-        pkgs.mkShell { buildInputs = with pkgs; [ llvm_19 lcov ]; };
+        pkgs.mkShell { buildInputs = with pkgs; [ llvm_19 clang_19 lcov ]; };
     };
 }

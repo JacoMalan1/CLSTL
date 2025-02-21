@@ -1,5 +1,7 @@
+// #define CLSTL_ENABLE_UNSTABLE
+
 #include <CLSTL/string.h>
-#include <CLSTL/unordered_map.h>
+// #include <CLSTL/unordered_map.h>
 #include <gtest/gtest.h>
 
 // TEST(HashMap, TestOne) {

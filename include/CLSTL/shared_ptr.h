@@ -21,6 +21,8 @@ public:
   using reference = T &;
   using const_reference = const T &;
 
+  shared_ptr() : m_Inner(nullptr) {}
+
   shared_ptr(const shared_ptr<T, Allocator> &other) : m_Inner(other.m_Inner) {
     if (this->m_Inner->strong_count.fetch_add(1, std::memory_order_acquire) ==
         std::numeric_limits<std::size_t>::max()) {
@@ -36,6 +38,7 @@ public:
       throw std::runtime_error(
           "Reached maximum value for size_t in shared_ptr");
     }
+    return *this;
   }
 
   ~shared_ptr() {

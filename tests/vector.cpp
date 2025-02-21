@@ -2,6 +2,11 @@
 #include <cstring>
 #include <gtest/gtest.h>
 
+template class clstl::vector<int>;
+template class clstl::vector_iter<clstl::vector<int>>;
+template class clstl::const_vector_iter<clstl::vector<int>>;
+template class clstl::vector_reverse_iter<clstl::vector<int>>;
+
 TEST(Vector, TestEmpty) {
   clstl::vector<int> v;
   ASSERT_EQ(v.capacity(), 0);
@@ -151,5 +156,22 @@ TEST(Vector, TestIterator) {
   i = 0;
   for (auto x : v) {
     ASSERT_EQ(x, i++);
+  }
+}
+
+TEST(Vector, TestClear) {
+  clstl::vector<int> v = {1, 2, 3};
+  ASSERT_EQ(v.size(), 3);
+  v.clear();
+  ASSERT_EQ(v.size(), 0);
+}
+
+TEST(Vector, TestCopy) {
+  clstl::vector<int> v = {1, 2, 3};
+  ASSERT_EQ(v.size(), 3);
+  clstl::vector<int> v2 = v;
+  ASSERT_EQ(v2.size(), 3);
+  for (std::size_t i = 0; i < v2.size(); i++) {
+    ASSERT_EQ(v2[i], i + 1);
   }
 }
