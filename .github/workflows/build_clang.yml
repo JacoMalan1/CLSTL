@@ -19,7 +19,7 @@ jobs:
       - run: mkdir build
       - name: Generate build scripts
         working-directory: build
-        run: cmake .. -DCMAKE_C_COMPILER=$(which clang) -DCMAKE_CXX_COMPILER=$(which clang++) -DCMAKE_BUILD_TYPE=Debug
+        run: cmake .. -DCMAKE_C_COMPILER=$(which clang) -DCMAKE_CXX_COMPILER=$(which clang++) -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
         working-directory: build
