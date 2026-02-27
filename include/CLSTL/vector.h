@@ -93,6 +93,16 @@ public:
     return temp;
   }
 
+  difference_type operator-(const vector_iter &other) const {
+    return this->m_Ptr - other.m_Ptr;
+  }
+
+  vector_iter operator[](const difference_type &idx) {
+    vector_iter cpy = *this;
+    cpy += idx;
+    return cpy;
+  }
+
   reference operator*() { return *this->m_Ptr; }
   const_reference operator*() const { return *this->m_Ptr; }
 
