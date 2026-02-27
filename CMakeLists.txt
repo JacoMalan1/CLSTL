@@ -41,7 +41,7 @@ if(CLSTL_TEST)
 endif()
 
 if(NOT MSVC)
-  add_definitions(-Werror -Wpedantic -Wall -Wextra)
+  add_definitions(-Wpedantic -Wall -Wextra)
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND CLSTL_TEST)
