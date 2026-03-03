@@ -203,6 +203,17 @@ public:
   vector &operator=(const vector &other);
   ~vector() {
     if (this->m_Data) {
+#if __cplusplus < 202002L
+      if (std::is_destructible<T>::value) {
+        for (std::size_t i = 0; i < this->m_Length; i++) {
+          this->m_Alloc.destroy(&this->m_Data[i]);
+        }
+      }
+#else
+      if (this->m_Length > 0) {
+        std::destroy_n(this->m_Data, this->m_Length);
+      }
+#endif
       this->m_Alloc.deallocate(this->m_Data, this->m_Capacity);
     }
   }
